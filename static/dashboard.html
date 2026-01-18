@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #232526, #414345);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 20px;
+            width: 500px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        h2 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        button {
+            background: #00ffcc;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00e6b8;
+            transform: scale(1.05);
+        }
+
+        #result {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+            min-height: 30px;
+            animation: fadeIn 0.5s ease;
+            color: #eaffff;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Dashboard</h2>
+    <p>You are successfully logged in.</p>
+
+    <button onclick="sendAction()">Send Action to Server</button>
+    <button onclick="logout()">Logout</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+function sendAction() {
+    let data = new URLSearchParams();
+    data.append("action", "dashboard_button_clicked");
+
+    fetch("/dashboard_action", {
+        method: "POST",
+        body: data,
+        headers: {"Content-Type": "application/x-www-form-urlencoded"}
+    })
+    .then(res => res.json())
+    .then(json => {
+        document.getElementById("result").innerText = 
+            "Server response: " + JSON.stringify(json);
+    });
+}
+
+function logout() {
+    window.location.href = "/";
+}
+</script>
+
+</body>
+</html>
+

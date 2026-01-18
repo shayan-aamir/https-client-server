@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4b79a1, #283e51);
+        }
+
+        .glass-box {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 350px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: fadeIn 1s ease;
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+        }
+
+        button {
+            width: 85%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            background: #00ffcc;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #00e6b8;
+            transform: scale(1.05);
+        }
+
+        #msg {
+            color: yellow;
+            margin-top: 15px;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-box">
+        <h2>Welcome Back</h2>
+
+        <form onsubmit="login(event)">
+            <input type="text" id="username" placeholder="Enter Username" required>
+            <input type="password" id="password" placeholder="Enter Password" required>
+            <button type="submit">Login</button>
+        </form>
+
+        <p id="msg"></p>
+    </div>
+
+<script>
+function login(e) {
+    e.preventDefault();
+
+    let data = new URLSearchParams();
+    data.append("username", document.getElementById("username").value);
+    data.append("password", document.getElementById("password").value);
+
+    fetch("/login", {
+        method: "POST",
+        body: data,
+        headers: {"Content-Type": "application/x-www-form-urlencoded"}
+    })
+    .then(res => res.json())
+    .then(json => {
+        if (json.success) {
+            window.location.href = json.redirect;
+        } else {
+            document.getElementById("msg").innerText = json.message;
+        }
+    });
+}
+</script>
+
+</body>
+</html>
+
